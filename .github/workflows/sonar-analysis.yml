@@ -1,33 +1,27 @@
-name: SonarQube Analysis
+name: Build
 
 on:
   push:
     branches:
-      - main # 或者您的主要开发分支，如 "开发"
+      - main
+
 
 jobs:
   build:
-    name: Analysis
-    runs-on: ubuntu-latest
+    name: Build and analyze
+    runs-on: windows-latest
+    
     steps:
-      # 第一步：检出您的代码到运行环境中
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          # 必须设置为0，SonarQube 需要完整的 git 历史记录
-          fetch-depth: 0  
-
-      # 第二步（可选）：如果项目需要特定环境，请先设置。例如 Java。
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: 17
-          distribution: 'temurin'
-      
-      # 第三步：运行 SonarQube 扫描
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@v2
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - uses: SonarSource/sonarqube-scan-action@v5
         env:
-          # 从仓库的 Secrets 中读取令牌和URL
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      # If you wish to fail your job when the Quality Gate is red, uncomment the
+      # following lines. This would typically be used to fail a deployment.
+      # - uses: SonarSource/sonarqube-quality-gate-action@v1
+      #   timeout-minutes: 5
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
