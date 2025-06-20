@@ -24,7 +24,7 @@ yarn prod
 - 函数命名规范 动词开头 can get set load send handle filter fetch
 - 组件的文件夹为 小写字母+下划线 组件名为驼峰 首字母大写
 
-### 2.框架1
+### 2.框架12
 
 - nuxt
 - ant-design
